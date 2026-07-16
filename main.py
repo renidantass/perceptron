@@ -34,23 +34,24 @@ class Perceptron:
 
                 error = sample.expected_output - predicted
 
-                self._update_parameters(sample, error)
+                if error == 0:
+                    continue
 
-                if error != 0:
-                    epoch_errors += 1
+                self._update_parameters(sample, error)
+                epoch_errors += 1
 
             if epoch_errors == 0:
                 break
 
-    def _update_parameters(self, sample: Sample, error: float) -> None:
+    def _update_parameters(self, sample: Sample, error: int) -> None:
         self._update_weights(sample, error)
         self._update_bias(error)
 
-    def _update_weights(self, sample: Sample, error: float) -> None:
+    def _update_weights(self, sample: Sample, error: int) -> None:
         for i in range(0, len(sample.inputs)):
             self.weights[i] += self.learning_rate * error * sample.inputs[i]
 
-    def _update_bias(self, error: float) -> None:
+    def _update_bias(self, error: int) -> None:
         self.bias += error * self.learning_rate
 
     def infer(self, inputs: list[int]) -> int:
